@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+let plugin = require("tailwindcss/plugin")
+
 module.exports = {
   content: ['./components/**/*.tsx', './pages/**/*.tsx'],
   theme: {
@@ -32,5 +34,6 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+  ],
 }

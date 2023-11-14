@@ -32,6 +32,9 @@ dependencies:
   typescript:
     specifier: ^4.7.4
     version: 4.9.5
+  use-utterances:
+    specifier: link:../use-utterances
+    version: link:../use-utterances
 
 devDependencies:
   '@types/node':

@@ -8,14 +8,40 @@ import Layout from '../../components/layout'
 import { getPostBySlug, getAllPosts } from '../../lib/api'
 import PostTitle from '../../components/post-title'
 import Head from 'next/head'
-import { CMS_NAME } from '../../lib/constants'
 import markdownToHtml from '../../lib/markdownToHtml'
 import type PostType from '../../interfaces/post'
+import { useEffect, useRef } from 'react'
 
 type Props = {
   post: PostType
   preview?: boolean
 }
+
+const Comments = () => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const scriptElement = document.createElement('script');
+    scriptElement.async = true;
+    scriptElement.crossOrigin = 'anonymous';
+    scriptElement.src = 'https://utteranc.es/client.js';
+
+    scriptElement.setAttribute('issue-term', 'url');
+    scriptElement.setAttribute('label', 'comment');
+    scriptElement.setAttribute(
+      'repo',
+      '000dry/000dry.dev',
+    );
+    scriptElement.setAttribute(
+      'theme',
+      'github-light',
+    );
+
+    ref.current?.appendChild(scriptElement);
+  }, []);
+
+  return <div ref={ref} />;
+}
+
 
 export default function Post({ post }: Props) {
   const router = useRouter()
@@ -31,10 +57,9 @@ export default function Post({ post }: Props) {
           <PostTitle>Loading…</PostTitle>
         ) : (
           <>
-            <article className="mb-32">
+            <article className="mb-16">
               <Head>
                 <title>{title}</title>
-                <meta property="og:image" content={post.ogImage.url} />
               </Head>
               <PostHeader
                 title={post.title}
@@ -44,6 +69,7 @@ export default function Post({ post }: Props) {
             </article>
           </>
         )}
+        <Comments />
       </Container>
     </Layout>
   )
@@ -61,7 +87,6 @@ export async function getStaticProps({ params }: Params) {
     'date',
     'slug',
     'content',
-    'ogImage',
   ])
   const content = await markdownToHtml(post.content || '')
 
